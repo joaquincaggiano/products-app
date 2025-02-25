@@ -31,16 +31,16 @@ export const authLogin = async (email: string, password: string) => {
     return returnUserToken(data);
   } catch (error) {
     console.log(error);
-    throw new Error("Invalid credentials");
+    return null
   }
 };
 
 export const authCheckStatus = async () => {
-    try {
-        const { data } = await productsApi.get<AuthResponse>("/auth/check-status");
-        return returnUserToken(data);
-    } catch (error) {
-        console.log(error);
-        throw new Error("Invalid token");
-    }
-}
+  try {
+    const { data } = await productsApi.get<AuthResponse>("/auth/check-status");
+    return returnUserToken(data);
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+};

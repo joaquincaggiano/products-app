@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/auth/store/useAuthStore";
 import { Redirect, Stack } from "expo-router";
 import { useEffect } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 
 const CheckAuthenticationLayout = () => {
   const { status, checkStatus } = useAuthStore();
@@ -18,7 +18,7 @@ const CheckAuthenticationLayout = () => {
     );
   }
 
-  if (status === "authenticated") {
+  if (status === "unauthenticated") {
     return <Redirect href="/auth/login" />
   }
 

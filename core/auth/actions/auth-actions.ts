@@ -38,7 +38,6 @@ export const authLogin = async (email: string, password: string) => {
 export const authCheckStatus = async () => {
   try {
     const { data } = await productsApi.get<AuthResponse>("/auth/check-status");
-    console.log("Data: ", data);
     return returnUserToken(data);
   } catch (error) {
     console.log(error);

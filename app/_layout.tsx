@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import '../global.css';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -14,7 +15,9 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    KanitRegular: require('../assets/fonts/Kanit-Regular.ttf'),
+    KanitThin: require('../assets/fonts/Kanit-Thin.ttf'),
+    KanitBold: require('../assets/fonts/Kanit-Bold.ttf'),
   });
 
   useEffect(() => {
@@ -29,8 +32,8 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        
+      <Stack screenOptions={{ headerShown: false }}>
+
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -1,5 +1,6 @@
 import LogoutIconButton from "@/auth/components/LogoutIconButton";
 import { useAuthStore } from "@/auth/store/useAuthStore";
+import Loading from "@/shared/components/Loading";
 import { useThemeColor } from "@/theme/hooks/useThemeColor";
 import { Redirect, Stack } from "expo-router";
 import { useEffect } from "react";
@@ -13,11 +14,7 @@ const CheckAuthenticationLayout = () => {
   }, []);
 
   if (status === "checking") {
-    return (
-      <View className="flex-1 items-center justify-center mb-2">
-        <ActivityIndicator />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (status === "unauthenticated") {

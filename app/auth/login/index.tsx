@@ -20,8 +20,8 @@ const LoginScreen = () => {
   const backgroundColor = useThemeColor({}, "background");
 
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "test1@google.com",
+    password: "Abc123",
   });
   const [isLoading, setIsLoading] = useState(false);
 

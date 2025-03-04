@@ -1,3 +1,4 @@
+import { SecureStorageAdapter } from "@/helpers/adapaters/secure-storage";
 import axios from "axios";
 import { Platform } from "react-native";
 
@@ -12,6 +13,14 @@ export const API_URL =
 
 const productsApi = axios.create({
   baseURL: API_URL,
+});
+
+productsApi.interceptors.request.use(async (config) => {
+  const token = await SecureStorageAdapter.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export { productsApi };

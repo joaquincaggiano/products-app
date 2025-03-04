@@ -2,6 +2,7 @@ import ThemedButton from "@/theme/components/ThemedButton";
 import ThemedLink from "@/theme/components/ThemedLink";
 import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
+import { useThemeColor } from "@/theme/hooks/useThemeColor";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -11,9 +12,11 @@ import {
 
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
+  const backgroundColor = useThemeColor({}, "background");
+
   return (
     <KeyboardAvoidingView behavior="padding" className="flex-1">
-      <ScrollView className="mx-10">
+      <ScrollView className="mx-10" style={{ backgroundColor }}>
         <View style={{ paddingTop: height * 0.35 }}>
           <ThemedText type="title">Ingresar</ThemedText>
           <ThemedText style={{ color: "grey" }}>
@@ -40,7 +43,7 @@ const LoginScreen = () => {
 
         <View className="flex-row items-center justify-center gap-2 mt-10">
           <ThemedText>¿No tienes una cuenta?</ThemedText>
-          <ThemedLink href="/auth/register">Regístrate</ThemedLink>
+          <ThemedLink href="/auth/register" style={{fontSize: 16}}>Regístrate</ThemedLink>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

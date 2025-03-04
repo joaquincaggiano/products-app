@@ -12,9 +12,6 @@ const ThemedButton = ({ children, icon, ...props }: Props) => {
 
   return (
     <Pressable
-      //   style={({ pressed }) => ({
-      //     backgroundColor: pressed ? primary + "90" : primary,
-      //   })}
       style={{ backgroundColor: primary }}
       className="px-2 py-4 rounded-md flex-row items-center justify-center gap-2"
       {...props}

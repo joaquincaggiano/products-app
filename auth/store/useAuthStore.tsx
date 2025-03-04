@@ -22,16 +22,15 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
   changeStatus: (token?: string, user?: User) => {
     if (!token || !user) {
-      set({ status: 'unauthenticated', token: undefined, user: undefined });
+      set({ status: "unauthenticated", token: undefined, user: undefined });
       return false;
     }
 
     set({
-      status: 'authenticated',
+      status: "authenticated",
       token: token,
       user: user,
     });
-
 
     return true;
   },

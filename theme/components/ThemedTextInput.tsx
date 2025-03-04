@@ -5,10 +5,11 @@ import { useRef, useState } from "react";
 
 interface Props extends TextInputProps {
   icon?: keyof typeof Ionicons.glyphMap;
+  className?: string;
 }
 
-const ThemedTextInput = ({ icon, ...props }: Props) => {
-  const primary = useThemeColor({}, "primary");
+const ThemedTextInput = ({ icon, className, ...props }: Props) => {
+  const primaryColor = useThemeColor({}, "primary");
   const textColor = useThemeColor({}, "text");
 
   const [isFocused, setIsFocused] = useState(false);
@@ -17,8 +18,8 @@ const ThemedTextInput = ({ icon, ...props }: Props) => {
 
   return (
     <View
-      className="flex-row items-center gap-3 border rounded-md p-2"
-      style={{ borderColor: isFocused ? primary : "#ccc" }}
+      className={`flex-row items-center gap-3 border rounded-md p-3 ${className}`}
+      style={{ borderColor: isFocused ? primaryColor : "#ccc" }}
       onTouchStart={() => inputRef.current?.focus()}
     >
       {icon && <Ionicons name={icon} size={24} color={textColor} />}

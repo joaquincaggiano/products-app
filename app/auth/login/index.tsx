@@ -1,3 +1,4 @@
+import ThemedButton from "@/theme/components/ThemedButton";
 import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
 import {
@@ -19,7 +20,7 @@ const LoginScreen = () => {
           </ThemedText>
         </View>
 
-        <View className="mt-5 gap-5">
+        <View className="mt-5 mb-10 gap-5">
           <ThemedTextInput
             placeholder="Correo electrónico"
             keyboardType="email-address"
@@ -32,6 +33,13 @@ const LoginScreen = () => {
             autoCapitalize="none"
             icon="lock-closed-outline"
           />
+        </View>
+
+        <ThemedButton icon="log-in-outline">Ingresar</ThemedButton>
+
+        <View className="flex-row items-center justify-center gap-2 mt-10">
+          <ThemedText>¿No tienes una cuenta?</ThemedText>
+          <ThemedText>Regístrate</ThemedText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

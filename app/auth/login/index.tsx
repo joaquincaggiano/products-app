@@ -1,4 +1,5 @@
 import ThemedButton from "@/theme/components/ThemedButton";
+import ThemedLink from "@/theme/components/ThemedLink";
 import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
 import {
@@ -39,7 +40,7 @@ const LoginScreen = () => {
 
         <View className="flex-row items-center justify-center gap-2 mt-10">
           <ThemedText>¿No tienes una cuenta?</ThemedText>
-          <ThemedText>Regístrate</ThemedText>
+          <ThemedLink href="/auth/register">Regístrate</ThemedLink>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

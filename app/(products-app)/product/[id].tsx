@@ -8,6 +8,7 @@ import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
 import { useProduct } from "@/products/hooks/useproduct";
 import Loading from "@/shared/components/Loading";
+import ProductImages from "@/products/components/ProductImages";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams();
@@ -48,6 +49,8 @@ const ProductScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <ScrollView>
+        <ProductImages images={product.images} />
+
         <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
           <ThemedTextInput placeholder="Título" className="my-2" />
           <ThemedTextInput placeholder="Slug" className="my-2" />

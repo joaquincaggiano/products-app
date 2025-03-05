@@ -1,4 +1,4 @@
-import { View, Text, Image, FlatList } from "react-native";
+import { View, Image, FlatList } from "react-native";
 
 interface Props {
   images: string[];
@@ -24,7 +24,12 @@ const ProductImages = ({ images }: Props) => {
             <View>
               <Image
                 source={{ uri: item }}
-                style={{ width: 300, height: 300, marginHorizontal: 7, borderRadius: 5 }}
+                style={{
+                  width: 300,
+                  height: 300,
+                  marginHorizontal: 7,
+                  borderRadius: 5,
+                }}
               />
             </View>
           )}

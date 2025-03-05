@@ -7,8 +7,10 @@ import ShutterButton from "@/camera/components/ShutterButton";
 import MenuIconButton from "@/theme/components/MenuIconButton";
 import ConfirmImageButton from "@/camera/components/ConfirmImageButton";
 import GetPermissions from "@/camera/components/GetPermissions";
+import { useCameraStore } from "@/camera/store/useCameraStore";
 
 const CameraScreen = () => {
+  const { addSelectedImage } = useCameraStore();
   const [facing, setFacing] = useState<CameraType>("back");
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [selectedImage, setSelectedImage] = useState<string>();
@@ -68,6 +70,8 @@ const CameraScreen = () => {
     if (!selectedImage) return;
 
     await MediaLibrary.createAssetAsync(selectedImage);
+
+    addSelectedImage(selectedImage);
 
     router.dismiss();
   };

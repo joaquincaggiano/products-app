@@ -9,6 +9,8 @@ import ThemedTextInput from "@/theme/components/ThemedTextInput";
 import { useProduct } from "@/products/hooks/useproduct";
 import Loading from "@/shared/components/Loading";
 import ProductImages from "@/products/components/ProductImages";
+import ThemedButtonGroup from "@/theme/components/ThemedButtonGroup";
+import ThemedButton from "@/theme/components/ThemedButton";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams();
@@ -72,6 +74,31 @@ const ProductScreen = () => {
         >
           <ThemedTextInput placeholder="Precio" className="flex-1" />
           <ThemedTextInput placeholder="Inventario" className="flex-1" />
+        </ThemedView>
+
+        <ThemedView style={{ marginHorizontal: 10 }}>
+          <ThemedButtonGroup
+            options={["XS", "S", "M", "L", "XL", "XXL", "XXXL"]}
+            selectedOptions={product.sizes}
+            onSelect={(options) => console.log(options)}
+          />
+
+          <ThemedButtonGroup
+            options={["kid", "men", "women", "unisex"]}
+            selectedOptions={[product.gender]}
+            onSelect={(options) => console.log(options)}
+          />
+        </ThemedView>
+
+        <ThemedView
+          style={{ marginHorizontal: 10, marginBottom: 50, marginTop: 20 }}
+        >
+          <ThemedButton
+            onPress={() => console.log("Guardar")}
+            icon="save-outline"
+          >
+            Guardar
+          </ThemedButton>
         </ThemedView>
       </ScrollView>
     </KeyboardAvoidingView>

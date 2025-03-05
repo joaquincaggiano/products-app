@@ -1,25 +1,47 @@
 import { useEffect } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { Redirect, useLocalSearchParams, useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/theme/hooks/useThemeColor";
 import { ThemedView } from "@/theme/components/ThemedView";
 import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
+import { useProduct } from "@/products/hooks/useproduct";
+import Loading from "@/shared/components/Loading";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams();
+
   const navigation = useNavigation();
   const primaryColor = useThemeColor({}, "primary");
 
+  const { productQuery } = useProduct(id as string);
+
   useEffect(() => {
     navigation.setOptions({
-      title: "Product",
       headerRight: () => (
         <Ionicons name="camera-outline" size={24} color={primaryColor} />
       ),
     });
   }, []);
+
+  useEffect(() => {
+    if (productQuery.data) {
+      navigation.setOptions({
+        title: productQuery.data.title,
+      });
+    }
+  }, [productQuery.data]);
+
+  if (productQuery.isLoading) {
+    return <Loading />;
+  }
+
+  if (!productQuery.data) {
+    return <Redirect href="/" />;
+  }
+
+  const product = productQuery.data;
 
   return (
     <KeyboardAvoidingView

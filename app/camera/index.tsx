@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/theme/components/ThemedText";
 import { useThemeColor } from "@/theme/hooks/useThemeColor";
+import ShutterButton from "@/camera/components/ShutterButton";
 
 const CameraScreen = () => {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const primaryColor = useThemeColor({}, "primary");
+
+  const cameraRef = useRef<CameraView>(null);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -41,18 +44,31 @@ const CameraScreen = () => {
     );
   }
 
+  const onShutterButtonPress = async () => {
+    if (!cameraRef.current) return;
+
+    const picture = await cameraRef.current.takePictureAsync({
+      quality: 0.7,
+    });
+
+    console.log(picture);
+
+    if (!picture?.uri) return;
+
+    // todo: guardar imagen
+  };
+
   function toggleCameraFacing() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+      <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
+        <ShutterButton onPress={onShutterButtonPress} />
+          {/* <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
       </CameraView>
     </View>
   );
@@ -85,6 +101,42 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+
+  flipCameraButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 32,
+    backgroundColor: "#17202A",
+    position: "absolute",
+    bottom: 40,
+    right: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  galleryButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 32,
+    backgroundColor: "#17202A",
+    position: "absolute",
+    bottom: 40,
+    left: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  returnCancelButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 32,
+    backgroundColor: "#17202A",
+    position: "absolute",
+    top: 40,
+    left: 32,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

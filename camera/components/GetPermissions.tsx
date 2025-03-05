@@ -1,13 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { useThemeColor } from "@/theme/hooks/useThemeColor";
-import { PermissionResponse } from "expo-camera";
 
 interface Props {
-  onPress: () => Promise<PermissionResponse>;
+  onPress: () => Promise<void>;
 }
 
-const PermissionsDenied = ({ onPress }: Props) => {
+const GetPermissions = ({ onPress }: Props) => {
   const primaryColor = useThemeColor({}, "primary");
 
   return (
@@ -44,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PermissionsDenied;
+export default GetPermissions;

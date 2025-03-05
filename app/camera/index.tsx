@@ -1,27 +1,44 @@
 import { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
-import { Image, StyleSheet, View } from "react-native";
-import ShutterButton from "@/camera/components/ShutterButton";
-import PermissionsDenied from "@/camera/components/PermissionsDenied";
-import MenuIconButton from "@/theme/components/MenuIconButton";
 import { router } from "expo-router";
+import * as MediaLibrary from "expo-media-library";
+import { Alert, Image, StyleSheet, View } from "react-native";
+import ShutterButton from "@/camera/components/ShutterButton";
+import MenuIconButton from "@/theme/components/MenuIconButton";
 import ConfirmImageButton from "@/camera/components/ConfirmImageButton";
+import GetPermissions from "@/camera/components/GetPermissions";
 
 const CameraScreen = () => {
   const [facing, setFacing] = useState<CameraType>("back");
-  const [permission, requestPermission] = useCameraPermissions();
+  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [selectedImage, setSelectedImage] = useState<string>();
+  const [mediaPermission, requestMediaPermission] =
+    MediaLibrary.usePermissions();
 
   const cameraRef = useRef<CameraView>(null);
 
-  if (!permission) {
+  const onRequestPermissions = async () => {
+    try {
+      const { status: cameraStatus } = await requestCameraPermission();
+      const { status: mediaStatus } = await requestMediaPermission();
+
+      if (cameraStatus !== "granted" || mediaStatus !== "granted") {
+        throw new Error("Permisos denegados");
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", "Error al solicitar permisos");
+    }
+  };
+
+  if (!cameraPermission) {
     // Camera permissions are still loading.
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!cameraPermission.granted) {
     // Camera permissions are not granted yet.
-    <PermissionsDenied onPress={requestPermission} />;
+    <GetPermissions onPress={onRequestPermissions} />;
   }
 
   const onShutterButtonPress = async () => {
@@ -30,8 +47,6 @@ const CameraScreen = () => {
     const picture = await cameraRef.current.takePictureAsync({
       quality: 0.7,
     });
-
-    console.log(picture);
 
     if (!picture?.uri) return;
 
@@ -49,9 +64,13 @@ const CameraScreen = () => {
     router.dismiss();
   };
 
-  const onPictureAccepted = () => {
-    // todo: implementar función
-  }
+  const onPictureAccepted = async () => {
+    if (!selectedImage) return;
+
+    await MediaLibrary.createAssetAsync(selectedImage);
+
+    router.dismiss();
+  };
 
   const onRetakePicture = () => {
     setSelectedImage(undefined);

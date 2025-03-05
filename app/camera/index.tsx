@@ -1,14 +1,16 @@
 import { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import ShutterButton from "@/camera/components/ShutterButton";
 import PermissionsDenied from "@/camera/components/PermissionsDenied";
 import MenuIconButton from "@/theme/components/MenuIconButton";
 import { router } from "expo-router";
+import ConfirmImageButton from "@/camera/components/ConfirmImageButton";
 
 const CameraScreen = () => {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const [selectedImage, setSelectedImage] = useState<string>();
 
   const cameraRef = useRef<CameraView>(null);
 
@@ -33,6 +35,8 @@ const CameraScreen = () => {
 
     if (!picture?.uri) return;
 
+    setSelectedImage(picture.uri);
+
     // todo: guardar imagen
   };
 
@@ -44,6 +48,40 @@ const CameraScreen = () => {
     // todo: limpiar estado
     router.dismiss();
   };
+
+  const onPictureAccepted = () => {
+    // todo: implementar función
+  }
+
+  const onRetakePicture = () => {
+    setSelectedImage(undefined);
+  };
+
+  if (selectedImage) {
+    return (
+      <View style={styles.container}>
+        <Image source={{ uri: selectedImage }} style={styles.camera} />
+
+        <ConfirmImageButton onPress={onPictureAccepted} />
+
+        <MenuIconButton
+          onPress={onRetakePicture}
+          icon="close-outline"
+          size={30}
+          color="white"
+          style={styles.returnCancelButton}
+        />
+
+        <MenuIconButton
+          onPress={onReturnCancel}
+          icon="arrow-back-outline"
+          size={30}
+          color="white"
+          style={styles.returnCancelButton}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

@@ -31,12 +31,12 @@ const CameraScreen = () => {
     }
   };
 
-  if (!cameraPermission) {
+  if (!cameraPermission || !mediaPermission) {
     // Camera permissions are still loading.
     return <View />;
   }
 
-  if (!cameraPermission.granted) {
+  if (!cameraPermission.granted || !mediaPermission.granted) {
     // Camera permissions are not granted yet.
     <GetPermissions onPress={onRequestPermissions} />;
   }

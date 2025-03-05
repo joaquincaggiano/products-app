@@ -4,13 +4,14 @@ import { Redirect, useLocalSearchParams, useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "@/theme/hooks/useThemeColor";
 import { ThemedView } from "@/theme/components/ThemedView";
-import { ThemedText } from "@/theme/components/ThemedText";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
-import { useProduct } from "@/products/hooks/useproduct";
 import Loading from "@/shared/components/Loading";
 import ProductImages from "@/products/components/ProductImages";
 import ThemedButtonGroup from "@/theme/components/ThemedButtonGroup";
 import ThemedButton from "@/theme/components/ThemedButton";
+import { useProduct } from "@/products/hooks/useProduct";
+import { Formik } from "formik";
+import { Size } from "@/core/products/interfaces/product";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams();
@@ -47,61 +48,93 @@ const ProductScreen = () => {
   const product = productQuery.data;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    <Formik
+      initialValues={product}
+      onSubmit={(productLike) => console.log(productLike)}
     >
-      <ScrollView>
-        <ProductImages images={product.images} />
-
-        <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
-          <ThemedTextInput placeholder="Título" className="my-2" />
-          <ThemedTextInput placeholder="Slug" className="my-2" />
-          <ThemedTextInput
-            placeholder="Descripción"
-            multiline
-            numberOfLines={5}
-            className="my-2"
-          />
-        </ThemedView>
-
-        <ThemedView
-          style={{
-            marginHorizontal: 10,
-            marginVertical: 5,
-            flexDirection: "row",
-            gap: 10,
-          }}
+      {({ values, handleSubmit, handleChange, setFieldValue }) => (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <ThemedTextInput placeholder="Precio" className="flex-1" />
-          <ThemedTextInput placeholder="Inventario" className="flex-1" />
-        </ThemedView>
+          <ScrollView>
+            <ProductImages images={values.images} />
 
-        <ThemedView style={{ marginHorizontal: 10 }}>
-          <ThemedButtonGroup
-            options={["XS", "S", "M", "L", "XL", "XXL", "XXXL"]}
-            selectedOptions={product.sizes}
-            onSelect={(options) => console.log(options)}
-          />
+            <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
+              <ThemedTextInput
+                placeholder="Título"
+                className="my-2"
+                value={values.title}
+                onChangeText={handleChange("title")}
+              />
+              <ThemedTextInput
+                placeholder="Slug"
+                className="my-2"
+                value={values.slug}
+                onChangeText={handleChange("slug")}
+              />
+              <ThemedTextInput
+                placeholder="Descripción"
+                multiline
+                numberOfLines={5}
+                className="my-2"
+                value={values.description}
+                onChangeText={handleChange("description")}
+              />
+            </ThemedView>
 
-          <ThemedButtonGroup
-            options={["kid", "men", "women", "unisex"]}
-            selectedOptions={[product.gender]}
-            onSelect={(options) => console.log(options)}
-          />
-        </ThemedView>
+            <ThemedView
+              style={{
+                marginHorizontal: 10,
+                marginVertical: 5,
+                flexDirection: "row",
+                gap: 10,
+              }}
+            >
+              <ThemedTextInput
+                placeholder="Precio"
+                className="flex-1"
+                value={values.price.toString()}
+                onChangeText={handleChange("price")}
+              />
+              <ThemedTextInput
+                placeholder="Inventario"
+                className="flex-1"
+                value={values.stock.toString()}
+                onChangeText={handleChange("stock")}
+              />
+            </ThemedView>
 
-        <ThemedView
-          style={{ marginHorizontal: 10, marginBottom: 50, marginTop: 20 }}
-        >
-          <ThemedButton
-            onPress={() => console.log("Guardar")}
-            icon="save-outline"
-          >
-            Guardar
-          </ThemedButton>
-        </ThemedView>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <ThemedView style={{ marginHorizontal: 10 }}>
+              <ThemedButtonGroup
+                options={["XS", "S", "M", "L", "XL", "XXL", "XXXL"]}
+                selectedOptions={values.sizes}
+                onSelect={(option) => {
+                  const newSizes = values.sizes.includes(option as Size)
+                    ? values.sizes.filter((size) => size !== option)
+                    : [...values.sizes, option];
+
+                  setFieldValue("sizes", newSizes);
+                }}
+              />
+
+              <ThemedButtonGroup
+                options={["kid", "men", "women", "unisex"]}
+                selectedOptions={[values.gender]}
+                onSelect={(option) => setFieldValue("gender", option)}
+              />
+            </ThemedView>
+
+            <ThemedView
+              style={{ marginHorizontal: 10, marginBottom: 50, marginTop: 20 }}
+            >
+              <ThemedButton onPress={() => handleSubmit()} icon="save-outline">
+                Guardar
+              </ThemedButton>
+            </ThemedView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
+    </Formik>
   );
 };
 

@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { Redirect, useLocalSearchParams, useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { useThemeColor } from "@/theme/hooks/useThemeColor";
+import {
+  Redirect,
+  router,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import { ThemedView } from "@/theme/components/ThemedView";
 import ThemedTextInput from "@/theme/components/ThemedTextInput";
 import Loading from "@/shared/components/Loading";
@@ -12,19 +15,22 @@ import ThemedButton from "@/theme/components/ThemedButton";
 import { useProduct } from "@/products/hooks/useProduct";
 import { Formik } from "formik";
 import { Size } from "@/core/products/interfaces/product";
+import MenuIconButton from "@/theme/components/MenuIconButton";
 
 const ProductScreen = () => {
   const { id } = useLocalSearchParams();
 
   const navigation = useNavigation();
-  const primaryColor = useThemeColor({}, "primary");
 
   const { productQuery, productMutation } = useProduct(id as string);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Ionicons name="camera-outline" size={24} color={primaryColor} />
+        <MenuIconButton
+          onPress={() => router.push("/camera")}
+          icon="camera-outline"
+        />
       ),
     });
   }, []);

@@ -19,7 +19,7 @@ const ProductScreen = () => {
   const navigation = useNavigation();
   const primaryColor = useThemeColor({}, "primary");
 
-  const { productQuery } = useProduct(id as string);
+  const { productQuery, productMutation } = useProduct(id as string);
 
   useEffect(() => {
     navigation.setOptions({
@@ -50,7 +50,7 @@ const ProductScreen = () => {
   return (
     <Formik
       initialValues={product}
-      onSubmit={(productLike) => console.log(productLike)}
+      onSubmit={(productLike) => productMutation.mutate(productLike)}
     >
       {({ values, handleSubmit, handleChange, setFieldValue }) => (
         <KeyboardAvoidingView

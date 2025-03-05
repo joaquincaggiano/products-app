@@ -3,6 +3,8 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { StyleSheet, View } from "react-native";
 import ShutterButton from "@/camera/components/ShutterButton";
 import PermissionsDenied from "@/camera/components/PermissionsDenied";
+import MenuIconButton from "@/theme/components/MenuIconButton";
+import { router } from "expo-router";
 
 const CameraScreen = () => {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -34,17 +36,43 @@ const CameraScreen = () => {
     // todo: guardar imagen
   };
 
-  function toggleCameraFacing() {
+  const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
-  }
+  };
+
+  const onReturnCancel = () => {
+    // todo: limpiar estado
+    router.dismiss();
+  };
 
   return (
     <View style={styles.container}>
       <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
         <ShutterButton onPress={onShutterButtonPress} />
-        {/* <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity> */}
+
+        <MenuIconButton
+          onPress={toggleCameraFacing}
+          icon="camera-reverse-outline"
+          size={30}
+          color="white"
+          style={styles.flipCameraButton}
+        />
+
+        <MenuIconButton
+          onPress={() => {}}
+          icon="images-outline"
+          size={30}
+          color="white"
+          style={styles.galleryButton}
+        />
+
+        <MenuIconButton
+          onPress={onReturnCancel}
+          icon="arrow-back-outline"
+          size={30}
+          color="white"
+          style={styles.returnCancelButton}
+        />
       </CameraView>
     </View>
   );

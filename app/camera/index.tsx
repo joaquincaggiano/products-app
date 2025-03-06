@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 import { Alert, Image, StyleSheet, View } from "react-native";
 import ShutterButton from "@/camera/components/ShutterButton";
 import MenuIconButton from "@/theme/components/MenuIconButton";
@@ -55,6 +56,25 @@ const CameraScreen = () => {
     setSelectedImage(picture.uri);
 
     // todo: guardar imagen
+  };
+
+  const onPickImages = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      // allowsEditing: true,
+      allowsMultipleSelection: true,
+      selectionLimit: 5,
+      aspect: [4, 3],
+      quality: 0.7,
+    });
+
+    if (result.canceled) return;
+
+    result.assets.forEach((asset) => {
+      addSelectedImage(asset.uri);
+    })
+
+    router.dismiss();
   };
 
   const toggleCameraFacing = () => {
@@ -120,7 +140,7 @@ const CameraScreen = () => {
         />
 
         <MenuIconButton
-          onPress={() => {}}
+          onPress={onPickImages}
           icon="images-outline"
           size={30}
           color="white"

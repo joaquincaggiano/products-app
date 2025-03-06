@@ -1,3 +1,4 @@
+import { useCameraStore } from "@/camera/store/useCameraStore";
 import { createUpdateProduct } from "@/core/products/actions/create-update-product";
 import { getProductById } from "@/core/products/actions/get-product-by-id";
 import { Product } from "@/core/products/interfaces/product";
@@ -6,6 +7,8 @@ import { useRef } from "react";
 import { Alert } from "react-native";
 
 export const useProduct = (id: string) => {
+  const { clearSelectedImages } = useCameraStore();
+
   const queryClient = useQueryClient();
   const productIdRef = useRef(id); // puede ser new o uuid
 
@@ -23,6 +26,8 @@ export const useProduct = (id: string) => {
       }),
     onSuccess: (data: Product) => {
       productIdRef.current = data.id;
+
+      clearSelectedImages();
 
       queryClient.invalidateQueries({ queryKey: ["products", "infinite"] });
       queryClient.invalidateQueries({ queryKey: ["products", id] });

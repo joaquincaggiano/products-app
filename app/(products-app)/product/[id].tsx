@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  RefreshControl,
+  ScrollView,
+} from "react-native";
 import {
   Redirect,
   router,
@@ -30,9 +35,8 @@ const ProductScreen = () => {
   useEffect(() => {
     return () => {
       clearSelectedImages();
-    }
-  }, [])
-
+    };
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -66,13 +70,27 @@ const ProductScreen = () => {
   return (
     <Formik
       initialValues={product}
-      onSubmit={(productLike) => productMutation.mutate(productLike)}
+      onSubmit={(productLike) =>
+        productMutation.mutate({
+          ...productLike,
+          images: [...productLike.images, ...selectedImages],
+        })
+      }
     >
       {({ values, handleSubmit, handleChange, setFieldValue }) => (
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={productQuery.isFetching}
+                onRefresh={async () => {
+                  await productQuery.refetch();
+                }}
+              />
+            }
+          >
             <ProductImages images={[...product.images, ...selectedImages]} />
 
             <ThemedView style={{ marginHorizontal: 10, marginTop: 20 }}>
